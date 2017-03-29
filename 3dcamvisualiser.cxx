@@ -41,6 +41,7 @@
 //#include <netinet/in.h>
 
 int sockfd;
+
 struct sockaddr_in cli_addr;
 
 void setupServer();
@@ -59,7 +60,7 @@ bool g_bDeviceFound = false;
 ProjectionHelper* g_pProjHelper = NULL;
 StereoCameraParameters g_scp;
 
-
+int globalframenum = 0;
 /*----------------------------------------------------------------------------*/
 // New depth sample event handler
 void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
@@ -95,8 +96,8 @@ void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
 	FrameFormat_toResolution(data.captureConfiguration.frameFormat, &w, &h);
 
 	
-	for (i = 0; i < 76798; i = i + 2) {
-		px[i / 2] = data.vertices[i].x;
+	for (i = 0; i < 76798; i = i + 2) {			//this is cycling through and grabbing the pixels
+		px[i / 2] = data.vertices[i].x;			//the i + 2 deal is just to grab every second pixel i.e. subsample the image
 		py[i / 2] = data.vertices[i].y;
 		pz[i / 2] = data.vertices[i].z;
 	}
@@ -171,10 +172,12 @@ void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
 	n = sendto(sockfd, (const char*)&z3, sizeof(z3), 0, (struct sockaddr *) &cli_addr, sizeof(cli_addr));
 	n = sendto(sockfd, (const char*)&z4, sizeof(z4), 0, (struct sockaddr *) &cli_addr, sizeof(cli_addr));
 	*/	
-	printf("Z#%u: %d \n", g_dFrames, x1[100]);
-
-    g_dFrames++;
-	fz[1] = g_dFrames;
+	globalframenum = globalframenum +1;
+	printf("Z#%u: %d \n", globalframenum, globalframenum);
+	
+	fz[1] = globalframenum;
+    //g_dFrames++;
+	
 
 	engPutVariable(ep, "fz", fz_array);
 	engPutVariable(ep, "x", x_array);
@@ -191,6 +194,7 @@ void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
 	mxDestroyArray(x_array);
 	mxDestroyArray(y_array);
 	mxDestroyArray(z_array);
+	mxDestroyArray(fz_array);
     // Quit the main loop after 200 depth frames received
 	//if (g_dFrames == 200)
      //   g_context.quit();

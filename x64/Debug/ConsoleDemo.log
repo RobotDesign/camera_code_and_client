@@ -1,0 +1,23 @@
+﻿  3dcamvisualiser.cxx
+C:\Users\Jack\OneDrive\Documents\hexapod\camera_code_and_client\include\DepthSense-public.hxx(940): warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class 'DepthSense::Exception'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_exception.h(43): note: see declaration of 'std::exception'
+  C:\Users\Jack\OneDrive\Documents\hexapod\camera_code_and_client\include\DepthSense-public.hxx(939): note: see declaration of 'DepthSense::Exception'
+3dcamvisualiser.cxx(86): warning C4101: 'y2': unreferenced local variable
+3dcamvisualiser.cxx(85): warning C4101: 'y1': unreferenced local variable
+3dcamvisualiser.cxx(80): warning C4101: 'x1': unreferenced local variable
+3dcamvisualiser.cxx(91): warning C4101: 'z2': unreferenced local variable
+3dcamvisualiser.cxx(83): warning C4101: 'x4': unreferenced local variable
+3dcamvisualiser.cxx(93): warning C4101: 'z4': unreferenced local variable
+3dcamvisualiser.cxx(87): warning C4101: 'y3': unreferenced local variable
+3dcamvisualiser.cxx(92): warning C4101: 'z3': unreferenced local variable
+3dcamvisualiser.cxx(82): warning C4101: 'x3': unreferenced local variable
+3dcamvisualiser.cxx(88): warning C4101: 'y4': unreferenced local variable
+3dcamvisualiser.cxx(90): warning C4101: 'z1': unreferenced local variable
+3dcamvisualiser.cxx(81): warning C4101: 'x2': unreferenced local variable
+3dcamvisualiser.cxx(215): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
+3dcamvisualiser.cxx(227): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  C:\Program Files (x86)\Windows Kits\8.1\Include\um\WinSock2.h(1850): note: see declaration of 'inet_addr'
+3dcamvisualiser.cxx(210): warning C4101: 'newsockfd': unreferenced local variable
+3dcamvisualiser.cxx(213): warning C4101: 'n': unreferenced local variable
+  ConsoleDemo.vcxproj -> C:\Users\Jack\OneDrive\Documents\hexapod\camera_code_and_client\x64\Debug\ConsoleDemo.exe
+  ConsoleDemo.vcxproj -> C:\Users\Jack\OneDrive\Documents\hexapod\camera_code_and_client\x64\Debug\ConsoleDemo.pdb (Full PDB)

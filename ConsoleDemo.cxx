@@ -26,8 +26,11 @@
 #include <stdio.h>
 #include <vector>
 #include <exception>
-
+#include <engine.h>
+#include <cmath>
 #include <DepthSense.hxx>
+
+# define M_PI       3.141592653589793238462643383279502884
 
 using namespace DepthSense;
 using namespace std;
@@ -50,7 +53,7 @@ StereoCameraParameters g_scp;
 // New audio sample event handler
 void onNewAudioSample(AudioNode node, AudioNode::NewSampleReceivedData data)
 {
-    printf("A#%u: %d\n",g_aFrames,data.audioData.size());
+    //printf("A#%u: %d\n",g_aFrames,data.audioData.size());
     g_aFrames++;
 }
 
@@ -58,7 +61,7 @@ void onNewAudioSample(AudioNode node, AudioNode::NewSampleReceivedData data)
 // New color sample event handler
 void onNewColorSample(ColorNode node, ColorNode::NewSampleReceivedData data)
 {
-    printf("C#%u: %d\n",g_cFrames,data.colorMap.size());
+    //printf("C#%u: %d\n",g_cFrames,data.colorMap.size());
     g_cFrames++;
 }
 
@@ -66,7 +69,18 @@ void onNewColorSample(ColorNode node, ColorNode::NewSampleReceivedData data)
 // New depth sample event handler
 void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
 {
-    printf("Z#%u: %d\n",g_dFrames,data.vertices.size());
+	int i = 0;
+	//double x[76800];
+	//double y[76800];
+	//double z[76800];
+	Engine *ep = engOpen(NULL);
+	mxArray *x_array = mxCreateDoubleMatrix(76800, 1, mxREAL);
+	mxArray *y_array = mxCreateDoubleMatrix(76800, 1, mxREAL);
+	mxArray *z_array = mxCreateDoubleMatrix(76800, 1, mxREAL);
+
+	double *px = mxGetPr(x_array);
+	double *py = mxGetPr(y_array);
+	double *pz = mxGetPr(z_array);
 
     // Project some 3D points in the Color Frame
     if (!g_pProjHelper)
@@ -95,11 +109,29 @@ void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
     Point2D p2DPoints[4];
     g_pProjHelper->get2DCoordinates ( p3DPoints, p2DPoints, 4, CAMERA_PLANE_COLOR);
     
+
+
+	DepthSense::Pointer<float> map_data = data.depthMapFloatingPoint;
+
+	for (i = 0; i < 76800; i++) {
+		px[i] = data.vertices[i].x;
+		py[i] = data.vertices[i].y;
+		pz[i] = data.vertices[i].z;
+
+	}
+
+	engPutVariable(ep, "x", x_array);
+	engPutVariable(ep, "y", y_array);
+	engPutVariable(ep, "z", z_array);
+	engEvalString(ep, "plot3(x,y,z,'.')");
+
+	printf("Z#%u: %d \n", g_dFrames, data.vertices[100].x);
+
     g_dFrames++;
 
     // Quit the main loop after 200 depth frames received
-    if (g_dFrames == 200)
-        g_context.quit();
+	//if (g_dFrames == 200)
+     //   g_context.quit();
 }
 
 /*----------------------------------------------------------------------------*/
@@ -304,6 +336,9 @@ void onDeviceDisconnected(Context context, Context::DeviceRemovedData data)
 /*----------------------------------------------------------------------------*/
 int main(int argc, char* argv[])
 {
+	
+	//Engine *ep = engOpen(NULL);
+	//engEvalString(ep, "init_scatt");
     g_context = Context::create("localhost");
 
     g_context.deviceAddedEvent().connect(&onDeviceConnected);
